@@ -1,0 +1,15 @@
+# Ignore all files
+/*
+
+# Unless they are in these folders
+!/src
+!/public
+!/eslint
+
+# ... or these files in root
+!.eslintrc.cjs
+!env.d.ts
+!package.json
+!tsconfig.json
+!tsconfig.vite-config.json
+!vite.config.ts

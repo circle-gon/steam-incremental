@@ -1,0 +1,11 @@
+# Ignore all files
+/*
+
+# Unless they are in these folders
+!/src
+!/public
+
+# ... or these files in root
+!.eslintrc.cjs
+!env.d.ts
+!vite.config.ts
