@@ -6,7 +6,7 @@ import { Upgrade } from '../compose/upgrades';
 import { drainingResource } from '../compose/resource';
 
 function baseConfig() {
-  return { layer: 1  } as const;
+  return { layer: 1 } as const;
 }
 export const steam = createLayer(() => {
   const id = 'steam';
@@ -99,3 +99,4 @@ export const steam = createLayer(() => {
     oneUpgrades,
   };
 });
+window.steam = steam;
