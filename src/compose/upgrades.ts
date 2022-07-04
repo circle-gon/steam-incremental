@@ -1,13 +1,10 @@
 import type {
   ConfigType,
   CoreConfigType,
-  UniqueComputed,
-  UpgradeType,
 } from '../types/types';
-import { ref } from 'vue';
-import type { Ref } from 'vue';
+import type { Ref, ComputedRef } from 'vue';
 import { R } from '../util/util';
-import { computed } from './computed';
+import { computed, ref } from './reactive';
 import { steam } from '../data/steam';
 
 const baseConfig: CoreConfigType = { layer: Infinity };
@@ -16,13 +13,14 @@ export function Upgrade(
   desc: string,
   getPrice: (level: number) => number,
   getEffect: (level: number) => number,
-  isUnlocked: UniqueComputed<boolean>,
+  isUnlocked: ComputedRef<boolean>,
   config: ConfigType = baseConfig
-): UpgradeType {
+) {
   const level = ref(0);
   const layer = config.layer;
   const maxLevel = ref(R(config.maxLevel, Infinity));
   const currentPrice = computed(() => getPrice(level.value));
+  const currentEffect = computed(() => getEffect(level.value));
   const priceDisplay = computed(
     () => currentPrice.value + ' ' + resource.value
   );
@@ -55,7 +53,7 @@ export function Upgrade(
   function buy() {
     const amt = store.value.owned;
     const price = currentPrice.value;
-    if (price <= amt.value && !isMaxLevel) {
+    if (price <= amt.value && !isMaxLevel.value) {
       switch (layer) {
         case 1:
           amt.value -= price;
@@ -66,19 +64,24 @@ export function Upgrade(
       level.value++;
     }
   }
+  function toJSON() {
+    return {
+      level,
+    };
+  }
   return {
     name,
     desc,
     isUnlocked,
-    layer,
     level,
+    layer,
     maxLevel,
     isUnbuyable,
     isMaxLevel,
     priceDisplay,
     buy,
-    getPrice,
-    getEffect,
+    currentEffect,
     hasBought,
+    toJSON,
   };
 }

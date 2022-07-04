@@ -1,12 +1,18 @@
 import { createLayer } from '../util/layers';
 import { isOfType } from '../util/types';
 import type { SteamResourceType, ResourceQueueType } from '../types/types';
-import { computed } from '../compose/computed';
+import { computed } from '../compose/reactive';
 import { Upgrade } from '../compose/upgrades';
 import { drainingResource } from '../compose/resource';
 
 function baseConfig() {
   return { layer: 1 } as const;
+}
+function oneTimeUpg() {
+  return {
+    ...baseConfig(),
+    maxLevel: 1,
+  };
 }
 export const steam = createLayer(() => {
   const id = 'steam';
@@ -32,10 +38,12 @@ export const steam = createLayer(() => {
     stronger: Upgrade(
       'Getting stronger!',
       'Multiplies speed of all resources by 2',
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
       (level: number) => 1,
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
       (level: number) => 1,
       computed(() => true),
-      baseConfig()
+      oneTimeUpg()
     ),
   };
   const drainRes = computed(() => {
@@ -68,8 +76,11 @@ export const steam = createLayer(() => {
   }
   function getResource(res: SteamResourceType) {
     const value = drainRes.value[res];
+    const doubleMulti = oneUpgrades.stronger.hasBought.value
+      ? oneUpgrades.stronger.currentEffect.value + 1
+      : 1;
     if (isUseable(res)) {
-      value.addNewQueue(value.multi.value);
+      value.addNewQueue(value.multi.value * doubleMulti);
     }
   }
   function updateFurnace() {
@@ -87,6 +98,15 @@ export const steam = createLayer(() => {
     updateResources(delta);
     updateFurnace();
   }
+  function toJSON() {
+    return {
+      steam,
+      water,
+      fill,
+      heat,
+      oneUpgrades,
+    };
+  }
   return {
     id,
     steam,
@@ -97,6 +117,7 @@ export const steam = createLayer(() => {
     getResource,
     update,
     oneUpgrades,
+    toJSON,
   };
 });
 window.steam = steam;

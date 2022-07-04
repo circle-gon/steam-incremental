@@ -1,9 +1,9 @@
-import { ref, reactive } from 'vue';
+import { reactive } from 'vue';
 import type { ResourceInputType, DrainType, QueueType } from '../types/types';
 import { R, getTime } from '../util/util';
-import {isOfType} from '../util/types'
+import { isOfType } from '../util/types';
 import { upThenDown as defaultQueue } from './queue';
-import { computed } from './computed';
+import { computed, ref } from './reactive';
 
 function resourceError(func: string): Error {
   return new Error(
@@ -79,7 +79,7 @@ export function drainingResource(options: ResourceInputType = {}) {
   }
   function update() {
     if (queueData) {
-      for (const [num, data] of queueData.queue.entries()) {
+      for (const [num, data] of [...queueData.queue].entries()) {
         if (isOfType<QueueType>(data, 'c')) {
           if (!queueData.canDo.value) {
             removeQueue(num);
@@ -95,6 +95,7 @@ export function drainingResource(options: ResourceInputType = {}) {
           if (owned.value > queueData.req.value) {
             queueData.queue = [];
             owned.value = queueData.req.value;
+            break;
           } else if (data.remain < 0.01) {
             owned.value += data.remain;
             queueData.sideEffect(data.remain);

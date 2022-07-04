@@ -1,12 +1,16 @@
 import type { TabOptionsType, InnerTabOptionsType } from './tabTypes';
 import type { Ref, ComputedRef } from 'vue';
-import { ComputedKey } from '../compose/computed';
+import { ComputedKey } from '../compose/reactive';
 
 // unexported types
 
 // generic types
 interface UniqueComputed<T> extends ComputedRef<T> {
   [ComputedKey]: true;
+  toJSON: () => undefined;
+}
+interface UniqueRef<T> extends Ref<T> {
+  toJSON: () => { value: T };
 }
 type KeyType = (string | number)[];
 
@@ -18,14 +22,22 @@ type Primitive =
   | null
   // eslint-disable-next-line @typescript-eslint/ban-types
   | Function;
+type Count = [never, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
 type BasicType =
   | Primitive
   | Ref<Primitive>
   | { [key: string]: BasicType }
   | BasicType[];
-interface GenericObjectType {
-  [key: string]: BasicType;
+interface WrapObject<T> {
+  [key: string]: T;
 }
+type ArrayOrObj<T> = T[] | WrapObject<T>;
+type AllValues<T, D extends Count[number] = 9> = [D] extends [never]
+  ? never
+  : T extends object
+  ? AllValues<T[keyof T], Count[D]>
+  : T;
+type GenericObjectType = WrapObject<BasicType>;
 
 // setting buttons
 interface InputType {
@@ -51,17 +63,19 @@ type RealSettingButtonType = SettingButtonType | SettingButtonInputType;
 interface UpgradeType {
   name: string;
   desc: string;
-  isUnlocked: UniqueComputed<boolean>;
+  isUnlocked: ComputedRef<boolean>;
   layer: number;
   level: Ref<number>;
   maxLevel: Ref<number>;
-  isUnbuyable: UniqueComputed<boolean>;
-  priceDisplay: UniqueComputed<string>;
-  isMaxLevel: UniqueComputed<boolean>;
+  isUnbuyable: ComputedRef<boolean>;
+  priceDisplay: ComputedRef<string>;
+  isMaxLevel: ComputedRef<boolean>;
   buy: () => void;
-  hasBought: UniqueComputed<boolean>;
-  getPrice: (level: number) => number;
-  getEffect: (level: number) => number;
+  currentEffect: ComputedRef<number>;
+  hasBought: ComputedRef<boolean>;
+  toJSON: () => {
+    level: UpgradeType['level'];
+  };
 }
 
 // upgrade config
@@ -108,7 +122,7 @@ interface DrainType {
   queue: QueueType[];
   gainPerTick: GainType;
   sideEffect: (diff: number) => void;
-  canDo: UniqueComputed<boolean>;
+  canDo: ComputedRef<boolean>;
   computeDiff: (diff: number) => number;
 }
 interface ResourceType {
@@ -118,7 +132,7 @@ interface ResourceType {
   addNewQueue: (drain: number) => void;
   queueData?: DrainType;
   isEmpty: (shouldEmpty?: boolean) => boolean;
-  isNotFull: UniqueComputed<boolean>;
+  isNotFull: ComputedRef<boolean>;
 }
 type ResourceQueueType = Required<ResourceType>;
 interface ResourceInputType {
@@ -129,7 +143,7 @@ interface ResourceInputType {
   c?: number;
   gainPerTick?: GainType;
   sideEffect?: (diff: number) => void;
-  canDo?: UniqueComputed<boolean>;
+  canDo?: ComputedRef<boolean>;
   computeDiff?: (diff: number) => number;
 }
 
@@ -154,6 +168,9 @@ export type {
   Primitive,
   BasicType,
   GenericObjectType,
+  ArrayOrObj,
+  AllValues,
+  UniqueRef,
   // setting buttons (below)
   // ts-prune-ignore-next
   SettingButtonType,

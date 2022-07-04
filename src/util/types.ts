@@ -11,7 +11,7 @@ function isObject(obj: unknown, notarray = false): boolean {
 function isObjectTP(obj: unknown, notarray = false): obj is object {
   return isObject(obj, notarray);
 }
-function isNumber(thing: ): thing is number {
+function isNumber(thing: unknown): thing is number {
   return Number.isInteger(thing);
 }
 export { isOfType, isObjectTP, isObject, isNumber };

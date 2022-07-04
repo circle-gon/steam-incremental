@@ -1,10 +1,10 @@
 <template>
   <button
     :class="{
-      useable: !upgrade.isUnbuyable,
-      maxed: upgrade.isMaxLevel,
+      useable: !upgrade.isUnbuyable.value,
+      maxed: upgrade.isMaxLevel.value,
     }"
-    :disabled="upgrade.isUnbuyable"
+    :disabled="upgrade.isUnbuyable.value"
     @click="buyUpgrade(upgData)"
     v-if="upgrade.isUnlocked"
     style="width: 200px; height: 200px; font-size: 90%"
@@ -12,13 +12,12 @@
     {{ upgrade.name }}
     <br />{{ upgrade.desc }} <br />
     <div><slot></slot></div>
-    Cost: {{ upgrade.priceDisplay }}
+    Cost: {{ upgrade.priceDisplay.value }}
   </button>
 </template>
 <script setup lang="ts">
 import { main } from '@/data/main';
 import { computed } from 'vue';
-import type { ComputedRef } from 'vue';
 import type { UpgradeType } from '@/types/types';
 const props = defineProps<{
   upgId: string | number;

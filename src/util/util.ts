@@ -2,11 +2,11 @@ import type {
   GenericObjectType,
   KeyType,
   BasicType,
-  Primitive,
-  UniqueComputed,
+  ArrayOrObj,
+  AllValues,
 } from '../types/types';
-import { ComputedKey } from '../compose/computed';
-import { isObjectTP, isObject } from './types';
+import { ComputedKey } from '../compose/reactive';
+import { isObjectTP } from './types';
 import { isRef, unref } from 'vue';
 // number display
 const displayNumber = function (what: number, prec = 2, overide = false) {
@@ -54,36 +54,36 @@ function R<T, O>(item: T, replacer: O): Result<T, O> {
   return (item !== undefined ? item : replacer) as Result<T, O>;
 }
 function iterateObject<T>(
-  data: object | T[],
-  func: (keys: KeyType, value: BasicType) => void,
+  arg: ArrayOrObj<T>,
+  cb: (path: KeyType, data: T) => void,
   keys: KeyType = []
 ) {
-  const iterate = isObject(data, true)
-    ? Object.entries(data)
-    : Array.isArray(data)
-    ? data.entries()
-    : '';
-  for (const [key, val] of iterate) {
-    const newKeys = [...keys, key];
-    func(newKeys, val);
+  if (Array.isArray(arg)) {
+    arg.forEach((item, ind) => {
+      cb([...keys, ind], item);
+    });
+  } else {
+    Object.entries(arg).forEach((item) => {
+      cb([...keys, item[0]], item[1]);
+    });
   }
 }
 function getAllProperties<T>(
-  data: object | T[],
-  func: (keys: KeyType, value: Primitive) => void,
+  data: ArrayOrObj<T>,
+  func: (keys: KeyType, value: AllValues<T>) => void,
   keys: KeyType = []
 ) {
   iterateObject(
     data,
-    (keys: KeyType, val: BasicType) => {
+    (keys, val) => {
       if (isObjectTP(val) && !isRef(val)) {
-        getAllProperties(val, func, keys);
+        getAllProperties(val as { [key: string]: any }, func, keys);
       } else if (
         val === undefined ||
         val === null ||
-        !((val as UniqueComputed<object>)[ComputedKey] === true)
+        !((val as any)[ComputedKey] === true)
       ) {
-        func(keys, unref(val));
+        func(keys, unref(val) as AllValues<T>);
       }
     },
     keys

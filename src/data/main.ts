@@ -43,7 +43,7 @@ export const main = createLayer(() => {
       if (upg !== undefined) {
         upg.buy();
       } else {
-        console.warn(`could not find upgrade ${data.name} in ${layer.id}`)
+        console.warn(`could not find upgrade ${data.name} in ${layer.id}`);
       }
     }
   }
@@ -86,6 +86,11 @@ export const main = createLayer(() => {
       mainGameLoop();
     });
   }
+  function toJSON() {
+    return {
+      settings,
+    };
+  }
   return {
     internals,
     settings,
@@ -93,6 +98,8 @@ export const main = createLayer(() => {
     id,
     loadGame,
     buyUpgrade,
+    toJSON,
+    hardReset,
   };
 });
 function getData<T extends { id: string }>(layers: T[]) {
