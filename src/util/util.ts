@@ -89,6 +89,26 @@ function getAllProperties<T>(
     keys
   );
 }
+function getDescendantProp<T extends object>(obj: T, desc: string): T {
+  let arr = desc.split('.');
+  let newObj: any = obj;
+  while (arr.length) {
+    newObj = newObj[arr.shift()!];
+  }
+  return newObj;
+}
+function setDescendantProp<T extends object>(
+  obj: T,
+  desc: string,
+  value: unknown
+) {
+  let arr = desc.split('.');
+  let newObj: any = obj;
+  while (arr.length > 1) {
+    newObj = newObj[arr.shift()!];
+  }
+  newObj[arr[0]] = value;
+}
 function getOrSetCustom(
   data: GenericObjectType,
   key: string,

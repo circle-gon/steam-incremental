@@ -47,7 +47,4 @@ function decodeSave(save: string) {
 function loadSave(save: string) {
   importObject(decodeSave(save));
 }
-window.getSave = () => {
-  return JSON.stringify(getObject());
-};
 export { getSave, loadSave, getStringKey };
