@@ -170,6 +170,7 @@ export type {
   GenericObjectType,
   ArrayOrObj,
   AllValues,
+  WrapObject,
   UniqueRef,
   // setting buttons (below)
   // ts-prune-ignore-next

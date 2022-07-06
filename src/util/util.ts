@@ -4,6 +4,7 @@ import type {
   BasicType,
   ArrayOrObj,
   AllValues,
+  WrapObject,
 } from '../types/types';
 import { ComputedKey } from '../compose/reactive';
 import { isObjectTP } from './types';
@@ -69,7 +70,7 @@ function iterateObject<T>(
   }
 }
 function getAllProperties<T>(
-  data: ArrayOrObj<T>,
+  data: T[] | WrapObject<T>,
   func: (keys: KeyType, value: AllValues<T>) => void,
   keys: KeyType = []
 ) {
@@ -77,7 +78,7 @@ function getAllProperties<T>(
     data,
     (keys, val) => {
       if (isObjectTP(val) && !isRef(val)) {
-        getAllProperties(val as { [key: string]: any }, func, keys);
+        getAllProperties(val as { [key: string]: unknown }, func, keys);
       } else if (
         val === undefined ||
         val === null ||
@@ -89,23 +90,23 @@ function getAllProperties<T>(
     keys
   );
 }
-function getDescendantProp<T extends object>(obj: T, desc: string): T {
+function getPropStr<T extends object>(obj: T, desc: string): T {
   let arr = desc.split('.');
   let newObj: any = obj;
   while (arr.length) {
-    newObj = newObj[arr.shift()!];
+    const key = arr.shift();
+    if (key === undefined) throw new TypeError('Key ' + key + ' is invalid.');
+    newObj = newObj[key];
   }
   return newObj;
 }
-function setDescendantProp<T extends object>(
-  obj: T,
-  desc: string,
-  value: unknown
-) {
+function setPropStr<T extends object>(obj: T, desc: string, value: unknown) {
   let arr = desc.split('.');
   let newObj: any = obj;
   while (arr.length > 1) {
-    newObj = newObj[arr.shift()!];
+    const key = arr.shift();
+    if (key === undefined) throw new TypeError('Key ' + key + ' is invalid.');
+    newObj = newObj[key];
   }
   newObj[arr[0]] = value;
 }
@@ -133,4 +134,6 @@ export {
   getTimePassed,
   getAllProperties,
   getOrSetCustom,
+  getPropStr,
+  setPropStr,
 };
