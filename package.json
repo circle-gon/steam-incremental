@@ -13,7 +13,7 @@
   },
   "dependencies": {
     "lz-string": "^1.4.4",
-    "vue": "^3.2.33"
+    "vue": "^3.2.37"
   },
   "devDependencies": {
     "@rushstack/eslint-patch": "^1.1.3",
