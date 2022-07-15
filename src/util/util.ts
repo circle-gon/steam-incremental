@@ -4,7 +4,6 @@ import type {
   BasicType,
   ArrayOrObj,
   AllValues,
-  WrapObject,
 } from '../types/types';
 import { ComputedKey } from '../compose/reactive';
 import { isObjectTP } from './types';
@@ -70,7 +69,7 @@ function iterateObject<T>(
   }
 }
 function getAllProperties<T>(
-  data: T[] | WrapObject<T>,
+  data: ArrayOrObj<T>,
   func: (keys: KeyType, value: AllValues<T>) => void,
   keys: KeyType = []
 ) {
@@ -78,7 +77,7 @@ function getAllProperties<T>(
     data,
     (keys, val) => {
       if (isObjectTP(val) && !isRef(val)) {
-        getAllProperties(val as { [key: string]: unknown }, func, keys);
+        getAllProperties(val as any, func, keys);
       } else if (
         val === undefined ||
         val === null ||
