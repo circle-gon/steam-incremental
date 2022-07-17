@@ -11,9 +11,10 @@
   </div>
 </template>
 <script setup lang="ts">
-import { main, steam } from "@/data/main";
-import { displayNumber } from "@/util/util";
-import { computed } from "vue";
+import { main } from '@/data/main';
+import { steam } from '@/data/steam';
+import { displayNumber } from '@/util/util';
+import { computed } from 'vue';
 
 const actFPS = computed(() => main.internals.fps);
 const shown = computed(() => main.settings.displayFPS);

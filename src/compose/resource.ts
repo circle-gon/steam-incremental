@@ -1,5 +1,5 @@
 import { reactive } from 'vue';
-import type { ResourceInputType, DrainType, QueueType } from '../types/types';
+import type { Ref, ComputedRef } from 'vue';
 import { R, getTime } from '../util/util';
 import { isOfType } from '../util/types';
 import { upThenDown as defaultQueue } from './queue';
@@ -11,6 +11,41 @@ function resourceError(func: string): Error {
   );
 }
 
+export interface QueueType {
+  remain: number;
+  onStart: number;
+  time: number;
+  drainFactor: number;
+  c: number;
+  lastRemain: number;
+  manual: boolean;
+}
+export type GainType = (data: QueueType) => number;
+export interface DrainType {
+  req: Ref<number>;
+  k: Ref<number>;
+  c: Ref<number>;
+  queue: QueueType[];
+  gainPerTick: GainType;
+  sideEffect: (diff: number) => void;
+  canDo: ComputedRef<boolean>;
+  computeDiff: (diff: number) => number;
+}
+export type ResourceType = ReturnType<typeof drainingResource>;
+export type ResourceQueueType = Required<ResourceType> & {
+  queueData: QueueType[];
+};
+export interface ResourceInputType {
+  owned?: number;
+  multi?: number;
+  req?: number;
+  k?: number;
+  c?: number;
+  gainPerTick?: GainType;
+  sideEffect?: (diff: number) => void;
+  canDo?: ComputedRef<boolean>;
+  computeDiff?: (diff: number) => number;
+}
 export function drainingResource(options: ResourceInputType = {}) {
   const owned = ref(R(options.owned, 0));
   const multi = ref(R(options.multi, 1));

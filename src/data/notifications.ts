@@ -1,8 +1,11 @@
 import { createLayer } from '../util/layers';
 import { reactive } from 'vue';
 import { getTime } from '../util/util';
-import type { NotificationType } from '../types/types';
 
+export interface NotificationType {
+  text: string;
+  time: number;
+}
 export const notifications = createLayer(() => {
   const notifications = reactive([] as NotificationType[]);
   function updateNotifications() {

@@ -1,5 +1,4 @@
 import type {
-  GenericObjectType,
   KeyType,
   BasicType,
   ArrayOrObj,
@@ -50,7 +49,7 @@ const formatTime = function (data: number) {
 };
 // util functions
 type Result<T, O> = T extends undefined ? O : T;
-function R<T, O>(item: T, replacer: O): Result<T, O> {
+function R<T, O>(item: T, replacer: O) {
   return (item !== undefined ? item : replacer) as Result<T, O>;
 }
 function iterateObject<T>(
@@ -109,18 +108,6 @@ function setPropStr<T extends object>(obj: T, desc: string, value: unknown) {
   }
   newObj[arr[0]] = value;
 }
-function getOrSetCustom(
-  data: GenericObjectType,
-  key: string,
-  get: boolean,
-  val?: BasicType
-) {
-  return Function(
-    'data',
-    'value',
-    (get ? 'return ' : '') + 'data' + key + (!get ? '=value' : '')
-  )(data, val);
-}
 // prevent ts-prune from erroring the functions below
 export {
   // ts-prune-ignore-next
@@ -132,7 +119,6 @@ export {
   iterateObject,
   getTimePassed,
   getAllProperties,
-  getOrSetCustom,
   getPropStr,
   setPropStr,
 };

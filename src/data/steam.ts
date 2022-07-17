@@ -1,6 +1,6 @@
 import { createLayer } from '../util/layers';
 import { isOfType } from '../util/types';
-import type { SteamResourceType, ResourceQueueType } from '../types/types';
+import type { ResourceQueueType } from '../compose/resource';
 import { computed } from '../compose/reactive';
 import { Upgrade } from '../compose/upgrades';
 import { drainingResource } from '../compose/resource';
@@ -14,6 +14,7 @@ function oneTimeUpg() {
     maxLevel: 1,
   };
 }
+export type SteamResourceType = 'heat' | 'water' | 'fill';
 export const steam = createLayer(() => {
   const id = 'steam';
   const steam = drainingResource();

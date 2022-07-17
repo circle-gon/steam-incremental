@@ -1,9 +1,9 @@
 import { layers } from '../data/main';
-import type { GenericObjectType } from '../types/types';
-import { getAllProperties, getOrSetCustom } from '../util/util';
+import { getAllProperties, getPropStr, setPropStr } from '../util/util';
 import { isNumber } from '../util/types';
+import type { ArrayOrObj } from '../types/types';
 import LZString from 'lz-string';
-import { notifications } from '../data/main';
+import { notifications } from '../data/notifications';
 
 function getProperType(isNum: boolean) {
   return isNum ? [] : {};
@@ -19,16 +19,16 @@ function getObject() {
   }
   return wantdata;
 }
-function importObject(save: GenericObjectType) {
+function importObject<T>(save: ArrayOrObj<T>) {
   getAllProperties(save, (keys, value) => {
     let accessKey = '';
     keys.forEach((key, ind) => {
       accessKey += getStringKey(key);
       const isLast = ind >= keys.length - 1;
-      const val = getOrSetCustom(layers as GenericObjectType, accessKey, true);
+      const val = getPropStr(layers, accessKey);
       if (val === undefined || isLast) {
         const set = !isLast ? getProperType(isNumber(keys[ind + 1])) : value;
-        getOrSetCustom(layers as GenericObjectType, accessKey, false, set);
+        setPropStr(layers, accessKey, set);
       }
     });
   });

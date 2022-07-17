@@ -1,17 +1,16 @@
-function isOfType<T>(test: T, prop: keyof T): test is T {
+export function isOfType<T>(test: T, prop: keyof T): test is T {
   return test[prop] !== undefined;
 }
-function isObject(obj: unknown, notarray = false): boolean {
+export function isObject(obj: unknown, notarray = false) {
   return (
     obj !== null &&
-    typeof obj === "object" &&
+    typeof obj === 'object' &&
     (notarray ? !Array.isArray(obj) : true)
   );
 }
-function isObjectTP(obj: unknown, notarray = false): obj is object {
+export function isObjectTP(obj: unknown, notarray = false): obj is object {
   return isObject(obj, notarray);
 }
-function isNumber(thing: unknown): thing is number {
+export function isNumber(thing: unknown): thing is number {
   return Number.isInteger(thing);
 }
-export { isOfType, isObjectTP, isObject, isNumber };

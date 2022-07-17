@@ -47,10 +47,10 @@
   </div>
 </template>
 <script setup lang="ts">
-import { steam } from '@/data/main';
+import { steam } from '@/data/steam';
 import UpgradeButton from '../generic/UpgradeButton.vue';
 import { displayNumber } from '@/util/util';
-import type { SteamResourceType } from '@/types/types';
+import type { SteamResourceType } from '@/data/steam';
 
 const isUseable = (otherRes: SteamResourceType) => steam.isUseable(otherRes);
 const getResource = (res: SteamResourceType) => {

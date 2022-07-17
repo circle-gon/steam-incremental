@@ -11,8 +11,8 @@
   </div>
 </template>
 <script setup lang="ts">
-import { notifications } from "@/data/main";
-import { computed } from "vue";
+import { notifications } from '@/data/notifications';
+import { computed } from 'vue';
 const notifies = computed(() => notifications.notifications.slice().reverse());
 const removeNotify = (i: number) => {
   notifications.removeNotify(i);

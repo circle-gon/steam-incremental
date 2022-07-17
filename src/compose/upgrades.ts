@@ -1,20 +1,20 @@
-import type {
-  ConfigType,
-  CoreConfigType,
-} from '../types/types';
 import type { Ref, ComputedRef } from 'vue';
 import { R } from '../util/util';
 import { computed, ref } from './reactive';
 import { steam } from '../data/steam';
 
-const baseConfig: CoreConfigType = { layer: Infinity };
+export type UpgradeType = ReturnType<typeof Upgrade>;
+export interface ConfigType {
+  maxLevel?: number;
+  layer: number
+}
 export function Upgrade(
   name: string,
   desc: string,
   getPrice: (level: number) => number,
   getEffect: (level: number) => number,
   isUnlocked: ComputedRef<boolean>,
-  config: ConfigType = baseConfig
+  config: ConfigType
 ) {
   const level = ref(0);
   const layer = config.layer;

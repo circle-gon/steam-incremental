@@ -18,7 +18,7 @@
 <script setup lang="ts">
 import { main } from '@/data/main';
 import { computed } from 'vue';
-import type { UpgradeType } from '@/types/types';
+import type { UpgradeType } from '@/compose/upgrades';
 const props = defineProps<{
   upgId: string | number;
   upgrade: UpgradeType;

@@ -1,5 +1,5 @@
-import type { QueueType } from "../types/types";
-import { getTimePassed } from "../util/util";
+import type { QueueType } from './resource';
+import { getTimePassed } from '../util/util';
 
 function upThenDown(data: QueueType) {
   return (
