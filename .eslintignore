@@ -10,6 +10,7 @@
 !.eslintrc.cjs
 !env.d.ts
 !package.json
+!tsconfig-base.json
 !tsconfig.json
 !tsconfig.vite-config.json
 !vite.config.ts
