@@ -51,7 +51,6 @@ import { steam } from '@/data/steam';
 import UpgradeButton from '../generic/UpgradeButton.vue';
 import { displayNumber } from '@/util/util';
 import type { SteamResourceType } from '@/data/steam';
-
 const isUseable = (otherRes: SteamResourceType) => steam.isUseable(otherRes);
 const getResource = (res: SteamResourceType) => {
   steam.getResource(res);

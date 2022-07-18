@@ -8,7 +8,7 @@ import { getStringKey } from '../main/saving';
 
 export function createLayer<T extends object>(func: () => T) {
   const data = func() as T & { $reset: () => void };
-  const paths: [KeyType, AllValues<T>][] = [];
+  const paths: [KeyType, any][] = [];
   function getPaths<S>(obj: ArrayOrObj<S>, initkeys: KeyType = []) {
     iterateObject(
       obj,

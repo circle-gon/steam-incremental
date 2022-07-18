@@ -94,7 +94,7 @@ function getPropStr<T extends object>(obj: T, desc: string): T {
   return newObj;
 }
 function setPropStr<T extends object>(obj: T, desc: string, value: unknown) {
-  let arr = desc.split('.');
+  let arr = desc.split('.').filter((i) => i.length > 0);
   let newObj: any = obj;
   while (arr.length > 1) {
     const key = arr.shift();
