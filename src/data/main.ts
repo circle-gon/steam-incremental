@@ -6,7 +6,6 @@ import { notifications } from './notifications';
 import { reactive } from 'vue';
 import type { UpgradeType } from '../compose/upgrades';
 
-// ts-prune-ignore-next
 export const main = createLayer(() => {
   const id = 'main';
   const internals = reactive({

@@ -1,9 +1,9 @@
-import type { KeyType, BasicType, ArrayOrObj, AllValues } from '../types/types';
+import type { KeyType, ArrayOrObj, AllValues } from '../types/types';
 import { ComputedKey } from '../compose/reactive';
 import { isObjectTP } from './types';
 import { isRef, unref } from 'vue';
 // number display
-const displayNumber = function (what: number, prec = 2, overide = false) {
+export function displayNumber(what: number, prec = 2, overide = false) {
   // if number is interger, display it as whole
   if (Number.isInteger(what)) {
     return what.toString();
@@ -16,18 +16,18 @@ const displayNumber = function (what: number, prec = 2, overide = false) {
     return what.toFixed(prec);
   }
   return what.toExponential(prec);
-};
+}
 
 // time utils
-const getTime = function () {
+export function getTime() {
   return Date.now();
-};
-function getTimePassed(time: number) {
+}
+export function getTimePassed(time: number) {
   return (getTime() - time) / 1000;
 }
 
 // time formatting
-const formatTime = function (data: number) {
+export function formatTime(data: number) {
   const hours = Math.floor(data / 3600);
   const minutes = Math.floor((data % 3600) / 60);
   const seconds = parseFloat(((data % 3600) % 60).toFixed(2));
@@ -41,13 +41,13 @@ const formatTime = function (data: number) {
     format(minutes, 'minute'),
     format(seconds, 'second', false),
   ].join(' ');
-};
+}
 // util functions
 type Result<T, O> = T extends undefined ? O : T;
-function R<T, O>(item: T, replacer: O) {
+export function R<T, O>(item: T, replacer: O) {
   return (item !== undefined ? item : replacer) as Result<T, O>;
 }
-function iterateObject<T>(
+export function iterateObject<T>(
   arg: ArrayOrObj<T>,
   cb: (path: KeyType, data: T) => void,
   keys: KeyType = []
@@ -62,7 +62,7 @@ function iterateObject<T>(
     });
   }
 }
-function getAllProperties<T>(
+export function getAllProperties<T>(
   data: ArrayOrObj<T>,
   func: (keys: KeyType, value: AllValues<T>) => void,
   keys: KeyType = []
@@ -83,7 +83,7 @@ function getAllProperties<T>(
     keys
   );
 }
-function getPropStr<T extends object>(obj: T, desc: string): T {
+export function getPropStr<T extends object>(obj: T, desc: string): T {
   let arr = desc.split('.').filter((i) => i.length > 0);
   let newObj: any = obj;
   while (arr.length) {
@@ -93,7 +93,11 @@ function getPropStr<T extends object>(obj: T, desc: string): T {
   }
   return newObj;
 }
-function setPropStr<T extends object>(obj: T, desc: string, value: unknown) {
+export function setPropStr<T extends object>(
+  obj: T,
+  desc: string,
+  value: unknown
+) {
   let arr = desc.split('.').filter((i) => i.length > 0);
   let newObj: any = obj;
   while (arr.length > 1) {
@@ -103,17 +107,3 @@ function setPropStr<T extends object>(obj: T, desc: string, value: unknown) {
   }
   newObj[arr[0]] = value;
 }
-// prevent ts-prune from erroring the functions below
-export {
-  // ts-prune-ignore-next
-  displayNumber,
-  // ts-prune-ignore-next
-  formatTime,
-  getTime,
-  R,
-  iterateObject,
-  getTimePassed,
-  getAllProperties,
-  getPropStr,
-  setPropStr,
-};

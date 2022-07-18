@@ -4,7 +4,7 @@ import { computed, ref } from './reactive';
 import { steam } from '../data/steam';
 
 export type UpgradeType = ReturnType<typeof Upgrade>;
-export interface ConfigType {
+interface ConfigType {
   maxLevel?: number;
   layer: number
 }

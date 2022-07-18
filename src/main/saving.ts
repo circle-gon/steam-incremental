@@ -5,10 +5,7 @@ import type { ArrayOrObj } from '../types/types';
 import LZString from 'lz-string';
 import { notifications } from '../data/notifications';
 
-function getProperType(isNum: boolean) {
-  return isNum ? [] : {};
-}
-function getStringKey(key: string | number) {
+export function getStringKey(key: string | number) {
   const nT = isNumber(key);
   return nT ? `[${key}]` : `.${key}`;
 }
@@ -27,13 +24,13 @@ function importObject<T>(save: ArrayOrObj<T>) {
       const isLast = ind >= keys.length - 1;
       const val = getPropStr(layers, accessKey);
       if (val === undefined || isLast) {
-        const set = !isLast ? getProperType(isNumber(keys[ind + 1])) : value;
+        const set = !isLast ? (isNumber(keys[ind + 1]) ? [] : {}) : value;
         setPropStr(layers, accessKey, set);
       }
     });
   });
 }
-function getSave() {
+export function getSave() {
   return LZString.compressToBase64(JSON.stringify(getObject()));
 }
 function decodeSave(save: string) {
@@ -44,7 +41,6 @@ function decodeSave(save: string) {
     return {};
   }
 }
-function loadSave(save: string) {
+export function loadSave(save: string) {
   importObject(decodeSave(save));
 }
-export { getSave, loadSave, getStringKey };

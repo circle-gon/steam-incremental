@@ -21,7 +21,7 @@ export function computed<T>(func: () => T) {
 /**
  * overides default ref function for json.stringify
  */
-export interface UniqueRef<T> extends Ref<T> {
+interface UniqueRef<T> extends Ref<T> {
   toJSON: () => { value: T };
 }
 export function ref<T>(data: T) {

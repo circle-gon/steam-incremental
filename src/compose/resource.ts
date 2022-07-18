@@ -20,8 +20,8 @@ export interface QueueType {
   lastRemain: number;
   manual: boolean;
 }
-export type GainType = (data: QueueType) => number;
-export interface DrainType {
+type GainType = (data: QueueType) => number;
+interface DrainType {
   req: Ref<number>;
   k: Ref<number>;
   c: Ref<number>;
@@ -31,11 +31,11 @@ export interface DrainType {
   canDo: ComputedRef<boolean>;
   computeDiff: (diff: number) => number;
 }
-export type ResourceType = ReturnType<typeof drainingResource>;
+type ResourceType = ReturnType<typeof drainingResource>;
 export type ResourceQueueType = Required<ResourceType> & {
   queueData: QueueType[];
 };
-export interface ResourceInputType {
+interface ResourceInputType {
   owned?: number;
   multi?: number;
   req?: number;

@@ -2,7 +2,7 @@ import { createLayer } from '../util/layers';
 import { reactive } from 'vue';
 import { getTime } from '../util/util';
 
-export interface NotificationType {
+interface NotificationType {
   text: string;
   time: number;
 }
