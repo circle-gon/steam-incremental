@@ -65,6 +65,7 @@ export const main = createLayer(() => {
     localStorage.setItem('sgsave', getSave());
     notifications.notify('Game saved.');
   }
+  window.saveGame = saveGame;
   function loadGame() {
     const save = internals.save || localStorage.getItem('sgsave') || '';
     if (!save) return;

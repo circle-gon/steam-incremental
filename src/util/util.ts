@@ -83,14 +83,26 @@ export function getAllProperties<T>(
     keys
   );
 }
-export function getPropStr<T extends object>(obj: T, desc: string): T {
-  let arr = desc.split('.').filter((i) => i.length > 0);
+export function getPropStr<T extends object>(
+  obj: T,
+  desc: string
+): AllValues<T> {
+  /*let arr = desc.split('.').filter((i) => i.length > 0);
   let newObj: any = obj;
   while (arr.length) {
     const key = arr.shift();
     if (key === undefined) throw new TypeError('Key ' + key + ' is invalid.');
     newObj = newObj[key];
   }
+  return newObj;*/
+  const arr = desc
+    .replace(/\[(\w+)\]/g, '.$1')
+    .replace(/^\./, '')
+    .split('.');
+  let newObj: any = obj;
+  arr.forEach((str) => {
+    newObj = newObj[str];
+  });
   return newObj;
 }
 export function setPropStr<T extends object>(
@@ -98,12 +110,23 @@ export function setPropStr<T extends object>(
   desc: string,
   value: unknown
 ) {
-  let arr = desc.split('.').filter((i) => i.length > 0);
+  /*let arr = desc.split('.').filter((i) => i.length > 0);
+  console.log(desc, 'key');
   let newObj: any = obj;
   while (arr.length > 1) {
     const key = arr.shift();
     if (key === undefined) throw new TypeError('Key ' + key + ' is invalid.');
     newObj = newObj[key];
+    console.log(newObj);
   }
-  newObj[arr[0]] = value;
+  newObj[arr[0]] = value;*/
+  const arr = desc
+    .replace(/\[(\w+)\]/g, '.$1')
+    .replace(/^\./, '')
+    .split('.');
+  let newObj: any = obj;
+  arr.forEach((str, i) => {
+    if (i === arr.length - 1) newObj[str] = value;
+    else newObj = newObj[str];
+  });
 }

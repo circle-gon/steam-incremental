@@ -121,4 +121,3 @@ export const steam = createLayer(() => {
     toJSON,
   };
 });
-window.steam = steam;
