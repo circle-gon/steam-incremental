@@ -1,9 +1,4 @@
-import type {
-  KeyType,
-  BasicType,
-  ArrayOrObj,
-  AllValues,
-} from '../types/types';
+import type { KeyType, BasicType, ArrayOrObj, AllValues } from '../types/types';
 import { ComputedKey } from '../compose/reactive';
 import { isObjectTP } from './types';
 import { isRef, unref } from 'vue';
@@ -89,7 +84,7 @@ function getAllProperties<T>(
   );
 }
 function getPropStr<T extends object>(obj: T, desc: string): T {
-  let arr = desc.split('.');
+  let arr = desc.split('.').filter((i) => i.length > 0);
   let newObj: any = obj;
   while (arr.length) {
     const key = arr.shift();
