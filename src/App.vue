@@ -12,7 +12,6 @@ import { main } from './data/main';
 import BusinessTab from './components/main/BusinessTab.vue';
 import DisplayView from './components/main/DisplayView.vue';
 import NotificationView from './components/main/NotificationView.vue';
-
 onMounted(() => {
   main.loadGame();
   main.mainGameLoop();

@@ -128,13 +128,13 @@ export function drainingResource(options: ResourceInputType = {}) {
           owned.value += diff;
           queueData.sideEffect(diff);
           if (owned.value > queueData.req.value) {
-            queueData.queue = [];
+            queueData.queue.splice(0, queueData.queue.length);
             owned.value = queueData.req.value;
             break;
           } else if (data.remain < 0.01) {
             owned.value += data.remain;
             queueData.sideEffect(data.remain);
-            queueData.queue.splice(num, 1);
+            removeQueue(num);
           }
         }
       }
